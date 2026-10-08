@@ -15,9 +15,8 @@ let aviationIndex = 0;
 let isAnimating = false;
 let animLockTimer = null;
 
-// Apply a 3D cylinder transition on the current image
-function animateAviationImage(direction) {
-    const img = document.getElementById('aviationImage');
+// Apply a 3D cylinder transition on the passed image element
+function animateGalleryImage(img, direction) {
     if (!img) return;
 
     const cls = direction === 'next' ? 'slide-next' : 'slide-prev';
@@ -77,7 +76,7 @@ function prevAviation() {
     const i = document.getElementById('aviationIndex');
     if (i) i.textContent = aviationIndex + 1;
     if (img) img.src = aviationImages[aviationIndex];
-    animateAviationImage('prev');
+    animateGalleryImage(img, 'prev');
 }
 
 // Show the next aviation image
@@ -88,7 +87,64 @@ function nextAviation() {
     const i = document.getElementById('aviationIndex');
     if (i) i.textContent = aviationIndex + 1;
     if (img) img.src = aviationImages[aviationIndex];
-    animateAviationImage('next');
+    animateGalleryImage(img, 'next');
+}
+
+// ==========================================
+// FRENCH FRIES IMAGE GALLERY
+// ==========================================
+const friesImages = [
+    'images/fries/fries_1.png',
+    'images/fries/fries_2.jpg',
+    'images/fries/fries_3.jpg'
+];
+
+let friesIndex = 0;
+
+// Show the current fries image and update the counter
+function showFriesImage() {
+    const img = document.getElementById('friesImage');
+    const i = document.getElementById('friesIndex');
+    const t = document.getElementById('friesTotal');
+    if (t) t.textContent = friesImages.length;
+    if (i) i.textContent = friesIndex + 1;
+    if (img) img.src = friesImages[friesIndex];
+}
+
+// Open the french fries gallery modal
+function openFriesGallery() {
+    friesIndex = 0;
+    showFriesImage();
+    const m = document.getElementById('friesModal');
+    if (m) {
+        m.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Close the french fries gallery modal
+function closeFriesGallery() {
+    const m = document.getElementById('friesModal');
+    if (m) {
+        m.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Show the previous fries image
+function prevFries() {
+    if (isAnimating) return;
+    friesIndex = (friesIndex - 1 + friesImages.length) % friesImages.length;
+    showFriesImage();
+    animateGalleryImage(document.getElementById('friesImage'), 'prev');
+}
+
+// Show the next fries image
+function nextFries() {
+    if (isAnimating) return;
+    friesIndex = (friesIndex + 1) % friesImages.length;
+    showFriesImage();
+    animateGalleryImage(document.getElementById('friesImage'), 'next');
 }
 
 // ==========================================
@@ -112,12 +168,6 @@ const favoritePopupData = {
         accent: 'chips',
         iconHtml: '<span class="fav-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 6.5 H19.5 L18.6 18.4 a2.6 2.6 0 0 1 -2.6 2.6 H8 a2.6 2.6 0 0 1 -2.6 -2.6 Z"/><path d="M4.5 6.5 H19.5 L18.9 4.1 a1.4 1.4 0 0 0 -1.35 -1.05 H6.45 a1.4 1.4 0 0 0 -1.35 1.05 Z"/><ellipse cx="12" cy="12.8" rx="5.2" ry="3.6"/><text x="12" y="11.3" text-anchor="middle" font-family="Outfit, sans-serif" font-size="2.2" font-weight="800" fill="currentColor" stroke="none">POTATO</text><text x="12" y="14.1" text-anchor="middle" font-family="Outfit, sans-serif" font-size="2.2" font-weight="800" fill="currentColor" stroke="none">CHIPS</text></svg></span>',
         placeholderText: 'Potato Chips photos coming soon!'
-    },
-    fries: {
-        title: 'French Fries',
-        accent: 'fries',
-        iconHtml: '<span class="fav-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2.5 v9.5"/><path d="M9.5 1.5 v10.5"/><path d="M13 1.5 v10.5"/><path d="M16.5 2.5 v9.5"/><path d="M4.5 11 h15 l-1.8 10 H6.3 Z"/><path d="M7 18.6 h10"/></svg></span>',
-        placeholderText: 'French Fries photos coming soon!'
     }
 };
 
@@ -160,21 +210,26 @@ document.addEventListener('keydown', function (e) {
     const aviationModal = document.getElementById('aviationModal');
     const musicModal = document.getElementById('musicModal');
     const favModal = document.getElementById('favoritesModal');
+    const friesModal = document.getElementById('friesModal');
     const aviationOpen = aviationModal && aviationModal.classList.contains('active');
     const musicOpen = musicModal && musicModal.classList.contains('active');
     const favOpen = favModal && favModal.classList.contains('active');
+    const friesOpen = friesModal && friesModal.classList.contains('active');
 
     if (e.key === 'Escape') {
         if (musicOpen) closeMusicVideo();
         else if (aviationOpen) closeAviationGallery();
+        else if (friesOpen) closeFriesGallery();
         else if (favOpen) closeFavoritePopup();
         return;
     }
 
-    if (aviationOpen) {
-        if (e.key === 'ArrowLeft') prevAviation();
-        if (e.key === 'ArrowRight') nextAviation();
-    }
+    if (aviationOpen && e.key === 'ArrowLeft') { prevAviation(); return; }
+    if (aviationOpen && e.key === 'ArrowRight') { nextAviation(); return; }
+    if (musicOpen && e.key === 'ArrowLeft') { prevMusic(); return; }
+    if (musicOpen && e.key === 'ArrowRight') { nextMusic(); return; }
+    if (friesOpen && e.key === 'ArrowLeft') { prevFries(); return; }
+    if (friesOpen && e.key === 'ArrowRight') { nextFries(); return; }
 });
 
 // ==========================================
@@ -257,11 +312,66 @@ document.addEventListener('DOMContentLoaded', function () {
     musicBtn.addEventListener('touchstart', kick, { passive: true });
 });
 
-// Open the music beats video popup and start playback
+// Music Beats popup now shows 2 media items: a video and a picture
+const musicItems = [
+    { type: 'video', src: 'videos/video_1.mp4' },
+    { type: 'image', src: 'images/music/music_1.jpg' }
+];
+let musicIndex = 0;
+
+// Render the current music item (video or image) and update the counter
+// direction ('prev'/'next') triggers the same 3D cylinder animation as aviation/fries
+function showMusicItem(direction) {
+    const v = document.getElementById('musicVideo');
+    const img = document.getElementById('musicImage');
+    const i = document.getElementById('musicIndex');
+    const t = document.getElementById('musicTotal');
+
+    if (t) t.textContent = musicItems.length;
+    if (i) i.textContent = musicIndex + 1;
+
+    const item = musicItems[musicIndex];
+
+    if (item.type === 'image') {
+        if (v) {
+            v.pause();
+            try { v.currentTime = 0; } catch (err) {}
+            v.style.display = 'none';
+        }
+        hideMusicLoader();
+        if (img) {
+            img.src = item.src;
+            img.style.display = 'block';
+            if (direction) animateGalleryImage(img, direction);
+        }
+        return;
+    }
+
+    if (img) img.style.display = 'none';
+    if (v) {
+        v.style.display = 'block';
+        if (direction) animateGalleryImage(v, direction);
+        try { v.currentTime = 0; } catch (err) {}
+        const loader = document.getElementById('musicLoader');
+        if (loader && v.readyState >= 3) {
+            hideMusicLoader();
+        } else {
+            showMusicLoader('Loading video…');
+        }
+        const p = v.play();
+        if (p !== undefined) p.catch(function () {});
+    }
+}
+
+// Open the music beats popup (starts on the video)
 function openMusicVideo() {
     const m = document.getElementById('musicModal');
-    const v = document.getElementById('musicVideo');
     if (!m) return;
+
+    musicIndex = 0;
+
+    const img = document.getElementById('musicImage');
+    if (img) img.style.display = 'none';
 
     m.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -270,22 +380,10 @@ function openMusicVideo() {
     const bg = document.getElementById('bgMusic');
     if (bg) bg.pause();
 
-    // Show the loading overlay right away so it is visible immediately
-    const loader = document.getElementById('musicLoader');
-    if (v && loader && v.readyState >= 3) {
-        hideMusicLoader();
-    } else {
-        showMusicLoader('Loading video…');
-    }
-
-    if (v) {
-        try { v.currentTime = 0; } catch (err) {}
-        const p = v.play();
-        if (p !== undefined) p.catch(function () {});
-    }
+    showMusicItem();
 }
 
-// Close the music beats video popup and stop playback
+// Close the music beats popup and stop playback
 function closeMusicVideo() {
     const m = document.getElementById('musicModal');
     if (!m || !m.classList.contains('active')) return;
@@ -305,6 +403,20 @@ function closeMusicVideo() {
         const p = bg.play();
         if (p !== undefined) p.catch(function () {});
     }
+}
+
+// Show the previous music item (video / image)
+function prevMusic() {
+    if (isAnimating) return;
+    musicIndex = (musicIndex - 1 + musicItems.length) % musicItems.length;
+    showMusicItem('prev');
+}
+
+// Show the next music item (video / image)
+function nextMusic() {
+    if (isAnimating) return;
+    musicIndex = (musicIndex + 1) % musicItems.length;
+    showMusicItem('next');
 }
 
 // ==========================================

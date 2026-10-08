@@ -13,7 +13,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='0.9em'%20font-size='90'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
 
     <!-- ?v= cache-busting: forces the browser to fetch the latest file even if an older copy is cached -->
-    <link rel="stylesheet" href="css/style.css?v=6">
+    <link rel="stylesheet" href="css/style.css?v=10">
 
     <!-- Critical inline styles: keeps the Aviation & Music Beats text design intact in any cache state -->
     <style>
@@ -119,8 +119,8 @@
                     <span class="fav-title">Potato Chips</span>
                     <span class="fav-sub">Favorite Snack</span>
                 </button>
-                <!-- French Fries (button -> popup) -->
-                <button type="button" class="fav-card fries" onclick="openFavoritePopup('fries')">
+                <!-- French Fries (button -> image gallery popup) -->
+                <button type="button" class="fav-card fries" onclick="openFriesGallery()">
                     <span class="fav-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2.5 v9.5"/><path d="M9.5 1.5 v10.5"/><path d="M13 1.5 v10.5"/><path d="M16.5 2.5 v9.5"/><path d="M4.5 11 h15 l-1.8 10 H6.3 Z"/><path d="M7 18.6 h10"/></svg></span>
                     <span class="fav-title">French Fries</span>
                     <span class="fav-sub">Favorite Side</span>
@@ -369,25 +369,52 @@
         </div>
     </div>
 
-    <!-- Music Beats Video Modal -->
-    <div id="musicModal" class="music-modal" role="dialog" aria-modal="true" aria-label="Music Beats Video">
+    <!-- Music Beats Media Popup (Video + Image Gallery) -->
+    <div id="musicModal" class="music-modal" role="dialog" aria-modal="true" aria-label="Music Beats Media">
         <div class="music-backdrop" onclick="closeMusicVideo()"></div>
         <div class="music-content">
             <div class="music-header">
                 <h3 class="music-title"><i class="fa-solid fa-headphones"></i> Music Beats</h3>
-                <button type="button" class="music-close" onclick="closeMusicVideo()" aria-label="Close video"><i class="fa-solid fa-xmark"></i></button>
+                <button type="button" class="music-close" onclick="closeMusicVideo()" aria-label="Close popup"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="music-stage">
                 <video id="musicVideo" class="music-video" src="videos/video_1.mp4" controls playsinline preload="metadata"></video>
+                <img id="musicImage" class="music-image" src="" alt="Music Beats Image">
                 <div id="musicLoader" class="music-loader" role="status" aria-live="polite">
                     <div class="music-spinner"></div>
                     <p id="musicLoaderText" class="music-loader-text">Loading video&hellip;</p>
                 </div>
+                <button type="button" class="music-nav prev" onclick="prevMusic()" aria-label="Previous media"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="music-nav next" onclick="nextMusic()" aria-label="Next media"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="music-counter">
+                <span id="musicIndex">1</span> / <span id="musicTotal">2</span>
             </div>
         </div>
     </div>
 
-    <!-- Favorites Coming-Soon Popup (Spider-Man, Smoked BBQ, Potato Chips, French Fries) -->
+    <!-- French Fries Image Gallery Modal -->
+    <div id="friesModal" class="aviation-modal" role="dialog" aria-modal="true" aria-label="French Fries Image Gallery">
+        <div class="aviation-backdrop" onclick="closeFriesGallery()"></div>
+        <div class="aviation-content">
+            <div class="aviation-header">
+                <h3 class="aviation-title"><span class="fav-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2.5 v9.5"/><path d="M9.5 1.5 v10.5"/><path d="M13 1.5 v10.5"/><path d="M16.5 2.5 v9.5"/><path d="M4.5 11 h15 l-1.8 10 H6.3 Z"/><path d="M7 18.6 h10"/></svg></span> French Fries</h3>
+                <button type="button" class="aviation-close" onclick="closeFriesGallery()" aria-label="Close gallery"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="aviation-stage">
+                <div class="aviation-gallery image-showcase">
+                    <img id="friesImage" class="aviation-img" src="" alt="French Fries Image">
+                </div>
+                <button type="button" class="aviation-nav prev" onclick="prevFries()" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="aviation-nav next" onclick="nextFries()" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="aviation-counter">
+                <span id="friesIndex">1</span> / <span id="friesTotal">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites Coming-Soon Popup (Spider-Man, Smoked BBQ, Potato Chips) -->
     <div id="favoritesModal" class="fav-modal" role="dialog" aria-modal="true" aria-label="Favorites showcase">
         <div class="fav-backdrop" onclick="closeFavoritePopup()"></div>
         <div class="fav-content">
@@ -407,6 +434,6 @@
         </div>
     </div>
 
-    <script src="js/main.js?v=6"></script>
+    <script src="js/main.js?v=10"></script>
 </body>
 </html>

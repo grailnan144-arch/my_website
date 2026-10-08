@@ -151,16 +151,18 @@
 
         .favorites-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+            gap: 20px;
             margin-top: 25px;
+            align-items: stretch;
         }
 
         .fav-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 22px 16px;
+            padding: 28px 18px;
+            min-height: 180px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -437,6 +439,10 @@
     font-size: 1.25rem;
 }
 
+.aviation-title .fav-svg {
+    font-size: 1.25rem;
+}
+
 .aviation-stage {
     position: relative;
     width: 100%;
@@ -670,6 +676,7 @@
 .music-close:focus-visible,
 .aviation-close:focus-visible,
 .aviation-nav:focus-visible,
+.music-nav:focus-visible,
 .fav-close:focus-visible {
     outline: 2px solid var(--neon-sky);
     outline-offset: 2px;
@@ -682,6 +689,7 @@
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.12);
+    perspective: 1000px;
 }
 
 .music-video {
@@ -690,6 +698,56 @@
     aspect-ratio: 16 / 9;
     background: #000;
     outline: none;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    will-change: transform, opacity;
+}
+
+.music-image {
+    display: none;
+    width: auto;
+    max-width: 100%;
+    max-height: 72vh;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+    background: #000;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    will-change: transform, opacity;
+}
+
+.music-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(7, 5, 16, 0.85);
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    color: #00f0ff;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 30;
+    transition: all 0.2s ease;
+}
+
+.music-nav:hover {
+    background: rgba(0, 240, 255, 0.2);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.music-nav.prev { left: 16px; }
+.music-nav.next { right: 16px; }
+
+.music-counter {
+    text-align: center;
+    margin-top: 10px;
+    color: var(--text-dim);
 }
 
 /* Loading overlay shown until the video is ready */
@@ -741,6 +799,8 @@
     .music-content { padding: 12px; }
     .music-title { font-size: 1rem; }
     .music-close { width: 36px; height: 36px; font-size: 1.05rem; }
+    .music-nav.prev { left: 4px; }
+    .music-nav.next { right: 4px; }
 }
 
 /* ==========================================
