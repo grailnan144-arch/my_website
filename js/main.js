@@ -230,7 +230,11 @@ const favoriteMediaItems = {
     { type: "image", src: "images/bbq/bbq_2.jpg" },
     { type: "image", src: "images/bbq/bbq_3.jpg" },
   ],
-  chips: [{ type: "image", src: "images/potato/potato_1.png" }],
+  chips: [
+    { type: "image", src: "images/potato/potato_1.png" },
+    { type: "image", src: "images/potato/potato_2.jpg" },
+    { type: "image", src: "images/potato/potato_3.png" },
+  ],
 };
 
 let favIndex = 0;
