@@ -118,6 +118,7 @@ h1.main-title {
     var(--neon-yellow) 100%
   );
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 12px;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -166,6 +167,7 @@ h2.section-title i {
   font-size: 1.6rem;
   background: linear-gradient(135deg, var(--neon-sky), var(--neon-pink));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
