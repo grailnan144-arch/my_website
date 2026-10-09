@@ -1094,8 +1094,8 @@ footer {
   top: 50%;
   transform: translateY(-50%);
   background: rgba(7, 5, 16, 0.85);
-  border: 1px solid rgba(255, 183, 0, 0.5);
-  color: #ffb700;
+  border: 1px solid var(--fav-accent-border);
+  color: var(--fav-accent);
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -1108,12 +1108,12 @@ footer {
   transition: all 0.2s ease;
 }
 
-.fav-modal.show-media .fav-nav {
+.fav-modal.has-nav .fav-nav {
   display: flex;
 }
 
 .fav-nav:hover {
-  background: rgba(255, 183, 0, 0.2);
+  background: var(--fav-accent-glow);
   transform: translateY(-50%) scale(1.05);
 }
 
@@ -1131,7 +1131,7 @@ footer {
   color: var(--text-dim);
 }
 
-.fav-modal.show-media .fav-counter {
+.fav-modal.has-nav .fav-counter {
   display: block;
 }
 
@@ -1143,9 +1143,14 @@ footer {
   display: none;
 }
 
-/* Smoked BBQ popup matches the Music Beats popup size (880px) */
-.fav-modal[data-accent="bbq"] .fav-content {
+/* Media popups (Spider-Man, Smoked BBQ, Potato Chips) match the
+   Music Beats popup size (880px) and hug their media like it does */
+.fav-modal.show-media .fav-content {
   width: min(880px, 100%);
+}
+
+.fav-modal.show-media .fav-stage {
+  min-height: 0;
 }
 
 .fav-placeholder {
@@ -1215,5 +1220,189 @@ footer {
   }
   .fav-nav.next {
     right: 4px;
+  }
+}
+
+/* ==========================================
+   MY FAVORITES LOADING TRANSITION (AIRPLANE)
+   ========================================== */
+.fav-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(7, 5, 16, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.fav-loader.active {
+  display: flex;
+}
+
+.fav-loader-card {
+  position: relative;
+  width: min(360px, 100%);
+  padding: 30px 26px 26px;
+  background: rgba(12, 10, 26, 0.96);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  border-radius: 20px;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(0, 240, 255, 0.22);
+  text-align: center;
+  overflow: hidden;
+  animation: favLoaderPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes favLoaderPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Sky area with a dashed flight path and the flying airplane */
+.fav-loader-track {
+  position: relative;
+  height: 84px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.fav-loader-track::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 64%;
+  height: 2px;
+  border-radius: 2px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0, 240, 255, 0.5) 0 9px,
+    transparent 9px 18px
+  );
+  opacity: 0.6;
+}
+
+.fav-loader-plane-wrap {
+  position: absolute;
+  top: 64%;
+  left: -16%;
+  animation: favPlaneMove 2s linear infinite;
+}
+
+.fav-loader-plane {
+  display: block;
+  font-size: 1.9rem;
+  color: var(--neon-sky);
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.75));
+  animation: favPlaneBob 0.9s ease-in-out infinite;
+}
+
+@keyframes favPlaneMove {
+  0% {
+    left: -16%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 104%;
+    opacity: 0;
+  }
+}
+
+@keyframes favPlaneBob {
+  0%,
+  100% {
+    transform: translateY(-45%) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-70%) rotate(-4deg);
+  }
+}
+
+.fav-loader-text {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  background: linear-gradient(
+    90deg,
+    var(--neon-sky),
+    var(--neon-pink),
+    var(--neon-yellow),
+    var(--neon-sky)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: favLoaderShimmer 2.5s linear infinite;
+}
+
+@keyframes favLoaderShimmer {
+  to {
+    background-position: 300% 0;
+  }
+}
+
+.fav-loader-bar {
+  width: 68%;
+  height: 5px;
+  margin: 16px auto 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.fav-loader-bar span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  animation: favLoaderBar 1.4s ease-in-out infinite;
+}
+
+@keyframes favLoaderBar {
+  0% {
+    margin-left: -40%;
+  }
+  100% {
+    margin-left: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .fav-loader-card {
+    padding: 22px 18px 20px;
+  }
+  .fav-loader-plane {
+    font-size: 1.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fav-loader-plane-wrap,
+  .fav-loader-plane,
+  .fav-loader-text,
+  .fav-loader-bar span {
+    animation-duration: 3s;
   }
 }

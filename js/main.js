@@ -1,4 +1,28 @@
 ﻿// ==========================================
+// ASSET CACHE-BUSTING
+// ==========================================
+// Bump this whenever images are replaced (e.g. re-cropped) so browsers
+// fetch the fresh copy instead of the previous one from cache.
+const ASSET_VERSION = "15";
+
+function assetUrl(path) {
+  if (!path) return path;
+  const sep = path.indexOf("?") === -1 ? "?" : "&";
+  return path + sep + "v=" + ASSET_VERSION;
+}
+
+// Collect only the image sources from a media list
+function imageSrcs(items) {
+  return (items || [])
+    .filter(function (item) {
+      return item.type === "image";
+    })
+    .map(function (item) {
+      return item.src;
+    });
+}
+
+// ==========================================
 // AVIATION IMAGE SHOWCASE
 // ==========================================
 const aviationImages = [
@@ -64,7 +88,7 @@ function openAviationGallery() {
 
   if (t) t.textContent = aviationImages.length;
   if (i) i.textContent = 1;
-  if (img) img.src = aviationImages[0];
+  if (img) img.src = assetUrl(aviationImages[0]);
   if (m) {
     m.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -88,7 +112,7 @@ function prevAviation() {
   const img = document.getElementById("aviationImage");
   const i = document.getElementById("aviationIndex");
   if (i) i.textContent = aviationIndex + 1;
-  if (img) img.src = aviationImages[aviationIndex];
+  if (img) img.src = assetUrl(aviationImages[aviationIndex]);
   animateGalleryImage(img, "prev");
 }
 
@@ -99,7 +123,7 @@ function nextAviation() {
   const img = document.getElementById("aviationImage");
   const i = document.getElementById("aviationIndex");
   if (i) i.textContent = aviationIndex + 1;
-  if (img) img.src = aviationImages[aviationIndex];
+  if (img) img.src = assetUrl(aviationImages[aviationIndex]);
   animateGalleryImage(img, "next");
 }
 
@@ -121,7 +145,7 @@ function showFriesImage() {
   const t = document.getElementById("friesTotal");
   if (t) t.textContent = friesImages.length;
   if (i) i.textContent = friesIndex + 1;
-  if (img) img.src = friesImages[friesIndex];
+  if (img) img.src = assetUrl(friesImages[friesIndex]);
 }
 
 // Open the french fries gallery modal
@@ -193,24 +217,43 @@ const favoritePopupData = {
   },
 };
 
-// Smoked BBQ popup media: a video followed by the BBQ picture
-const bbqItems = [
-  { type: "video", src: "videos/bbq_vid/bbq_1.mp4" },
-  { type: "image", src: "images/bbq/bbq_1.jpg" },
-];
-let favIndex = 0;
+// Real media galleries for the favorites popups (video / images + counter + nav)
+const favoriteMediaItems = {
+  spidey: [
+    { type: "image", src: "images/spider/spider_1.webp" },
+    { type: "image", src: "images/spider/spider_2.jpg" },
+    { type: "image", src: "images/spider/spider_3.jpg" },
+  ],
+  bbq: [
+    { type: "video", src: "videos/bbq_vid/bbq_1.mp4" },
+    { type: "image", src: "images/bbq/bbq_1.jpg" },
+    { type: "image", src: "images/bbq/bbq_2.jpg" },
+    { type: "image", src: "images/bbq/bbq_3.jpg" },
+  ],
+  chips: [{ type: "image", src: "images/potato/potato_1.png" }],
+};
 
-// Render the current Smoked BBQ media item and update the counter
+let favIndex = 0;
+let favItems = [];
+
+// Render the current favorites media item (video or image) and update the counter
 function showFavoriteItem(direction) {
+  const m = document.getElementById("favoritesModal");
   const v = document.getElementById("favVideo");
   const img = document.getElementById("favImage");
   const i = document.getElementById("favIndex");
   const t = document.getElementById("favTotal");
+  const stage = m ? m.querySelector(".fav-stage") : null;
 
-  if (t) t.textContent = bbqItems.length;
+  if (!favItems.length) return;
+
+  if (t) t.textContent = favItems.length;
   if (i) i.textContent = favIndex + 1;
 
-  const item = bbqItems[favIndex];
+  const item = favItems[favIndex];
+  if (!item) return;
+
+  if (stage) stage.classList.toggle("has-video", item.type === "video");
 
   if (item.type === "image") {
     if (v) {
@@ -221,7 +264,7 @@ function showFavoriteItem(direction) {
       v.style.display = "none";
     }
     if (img) {
-      img.src = item.src;
+      img.src = assetUrl(item.src);
       img.style.display = "block";
       if (direction) animateGalleryImage(img, direction);
     }
@@ -240,7 +283,7 @@ function showFavoriteItem(direction) {
   }
 }
 
-// Open a favorites popup and fill in the title, icon, and placeholder message
+// Open a favorites popup and fill in the title, icon, and media gallery
 function openFavoritePopup(kind) {
   const data = favoritePopupData[kind];
   if (!data) return;
@@ -250,7 +293,6 @@ function openFavoritePopup(kind) {
   const title = document.getElementById("favPopupTitle");
   const phIcon = document.getElementById("favPlaceholderIcon");
   const phText = document.getElementById("favPlaceholderText");
-  const stage = m ? m.querySelector(".fav-stage") : null;
   const video = document.getElementById("favVideo");
   const img = document.getElementById("favImage");
 
@@ -259,11 +301,13 @@ function openFavoritePopup(kind) {
   if (phIcon) phIcon.innerHTML = data.iconHtml;
   if (phText) phText.textContent = data.placeholderText;
 
-  // Smoked BBQ has a real media gallery; every other favorite shows the placeholder
-  const hasMedia = kind === "bbq";
+  // Favorites with real media render a gallery; the rest show the placeholder
+  favItems = favoriteMediaItems[kind] || [];
+  const hasMedia = favItems.length > 0;
+
   if (m) m.classList.toggle("show-media", hasMedia);
   if (m) m.classList.toggle("show-placeholder", !hasMedia);
-  if (stage) stage.classList.toggle("has-video", hasMedia);
+  if (m) m.classList.toggle("has-nav", hasMedia);
 
   if (hasMedia) {
     favIndex = 0;
@@ -305,11 +349,11 @@ function closeFavoritePopup() {
   if (img) img.style.display = "none";
 
   if (m) {
-    m.classList.remove("active");
+    m.classList.remove("active", "show-media", "show-placeholder", "has-nav");
     document.body.style.overflow = "";
   }
 
-  // Resume the background music after the BBQ popup closes
+  // Resume the background music after the media popup closes
   if (hadMedia) {
     const bg = document.getElementById("bgMusic");
     if (bg) {
@@ -319,18 +363,96 @@ function closeFavoritePopup() {
   }
 }
 
-// Show the previous Smoked BBQ media item (video / image)
+// Show the previous favorites media item (video / image)
 function prevFavoriteMedia() {
-  if (isAnimating) return;
-  favIndex = (favIndex - 1 + bbqItems.length) % bbqItems.length;
+  if (isAnimating || !favItems.length) return;
+  favIndex = (favIndex - 1 + favItems.length) % favItems.length;
   showFavoriteItem("prev");
 }
 
-// Show the next Smoked BBQ media item (video / image)
+// Show the next favorites media item (video / image)
 function nextFavoriteMedia() {
-  if (isAnimating) return;
-  favIndex = (favIndex + 1) % bbqItems.length;
+  if (isAnimating || !favItems.length) return;
+  favIndex = (favIndex + 1) % favItems.length;
   showFavoriteItem("next");
+}
+
+// ==========================================
+// MY FAVORITES LOADING TRANSITION (AIRPLANE)
+// ==========================================
+// Which images to warm up while the airplane loader is showing
+const favLoaderImages = {
+  aviation: function () {
+    return aviationImages;
+  },
+  fries: function () {
+    return friesImages;
+  },
+  music: function () {
+    return imageSrcs(musicItems);
+  },
+  spidey: function () {
+    return imageSrcs(favoriteMediaItems.spidey);
+  },
+  bbq: function () {
+    return imageSrcs(favoriteMediaItems.bbq);
+  },
+  chips: function () {
+    return imageSrcs(favoriteMediaItems.chips);
+  },
+};
+
+let favLoaderTimer = null;
+let favLoaderAction = null;
+
+// Preload image URLs (cache-busted) so the popup content is ready when it opens
+function preloadImages(list) {
+  (list || []).forEach(function (src) {
+    const im = new Image();
+    im.src = assetUrl(src);
+  });
+}
+
+// Show the themed airplane loader for ~3s, then reveal the requested section
+function withFavoriteLoader(kind, action) {
+  const loader = document.getElementById("favLoader");
+  if (!loader) {
+    action();
+    return;
+  }
+
+  const getImages = favLoaderImages[kind];
+  if (getImages) preloadImages(getImages());
+
+  favLoaderAction = action;
+  loader.classList.add("active");
+  loader.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+
+  clearTimeout(favLoaderTimer);
+  favLoaderTimer = setTimeout(function () {
+    loader.classList.remove("active");
+    loader.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    const fn = favLoaderAction;
+    favLoaderAction = null;
+    if (typeof fn === "function") fn();
+  }, 3000);
+}
+
+// Entry point used by the "My Favorites" buttons
+function openFavWithLoader(kind) {
+  if (kind === "aviation") {
+    withFavoriteLoader(kind, openAviationGallery);
+  } else if (kind === "music") {
+    withFavoriteLoader(kind, openMusicVideo);
+  } else if (kind === "fries") {
+    withFavoriteLoader(kind, openFriesGallery);
+  } else {
+    withFavoriteLoader(kind, function () {
+      openFavoritePopup(kind);
+    });
+  }
 }
 
 // ==========================================
@@ -510,7 +632,7 @@ function showMusicItem(direction) {
     }
     hideMusicLoader();
     if (img) {
-      img.src = item.src;
+      img.src = assetUrl(item.src);
       img.style.display = "block";
       if (direction) animateGalleryImage(img, direction);
     }

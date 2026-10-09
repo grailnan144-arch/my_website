@@ -22,7 +22,7 @@
     />
 
     <!-- ?v= cache-busting: forces the browser to fetch the latest file even if an older copy is cached -->
-    <link rel="stylesheet" href="css/style.css?v=13" />
+    <link rel="stylesheet" href="css/style.css?v=15" />
 
     <!-- Critical inline styles: keeps the Aviation & Music Beats text design intact in any cache state -->
     <style>
@@ -73,7 +73,7 @@
           <div class="about-photo-column">
             <img
               class="about-photo"
-              src="images/profile/aboutme_profile.jpg"
+              src="images/profile/aboutme_profile.jpg?v=15"
               alt="Jarred Reinel C. Vivar"
             />
           </div>
@@ -113,7 +113,7 @@
           <button
             type="button"
             class="fav-card aviation"
-            onclick="openAviationGallery()"
+            onclick="openFavWithLoader('aviation')"
           >
             <i class="fa-solid fa-jet-fighter"></i>
             <span class="fav-title">Aviation</span>
@@ -123,7 +123,7 @@
           <button
             type="button"
             class="fav-card spidey"
-            onclick="openFavoritePopup('spidey')"
+            onclick="openFavWithLoader('spidey')"
           >
             <i class="fa-solid fa-spider"></i>
             <span class="fav-title">Spider-Man</span>
@@ -133,7 +133,7 @@
           <button
             type="button"
             class="fav-card music"
-            onclick="openMusicVideo()"
+            onclick="openFavWithLoader('music')"
           >
             <i class="fa-solid fa-headphones"></i>
             <span class="fav-title">Music Beats</span>
@@ -143,7 +143,7 @@
           <button
             type="button"
             class="fav-card bbq"
-            onclick="openFavoritePopup('bbq')"
+            onclick="openFavWithLoader('bbq')"
           >
             <span class="fav-svg"
               ><svg
@@ -171,7 +171,7 @@
           <button
             type="button"
             class="fav-card chips"
-            onclick="openFavoritePopup('chips')"
+            onclick="openFavWithLoader('chips')"
           >
             <span class="fav-svg"
               ><svg
@@ -224,7 +224,7 @@
           <button
             type="button"
             class="fav-card fries"
-            onclick="openFriesGallery()"
+            onclick="openFavWithLoader('fries')"
           >
             <span class="fav-svg"
               ><svg
@@ -724,7 +724,7 @@
             id="favImage"
             class="fav-image"
             src=""
-            alt="Smoked BBQ Image"
+            alt="Favorite media"
           />
           <div class="fav-placeholder">
             <span class="fav-placeholder-icon" id="favPlaceholderIcon"></span>
@@ -748,11 +748,30 @@
           </button>
         </div>
         <div class="fav-counter">
-          <span id="favIndex">1</span> / <span id="favTotal">2</span>
+          <span id="favIndex">1</span> / <span id="favTotal">3</span>
         </div>
       </div>
     </div>
 
-    <script src="js/main.js?v=13"></script>
+    <!-- My Favorites Loading Transition (airplane themed) -->
+    <div
+      id="favLoader"
+      class="fav-loader"
+      role="status"
+      aria-live="polite"
+      aria-hidden="true"
+    >
+      <div class="fav-loader-card">
+        <div class="fav-loader-track">
+          <span class="fav-loader-plane-wrap">
+            <i class="fa-solid fa-plane fav-loader-plane"></i>
+          </span>
+        </div>
+        <p class="fav-loader-text">Loading</p>
+        <div class="fav-loader-bar"><span></span></div>
+      </div>
+    </div>
+
+    <script src="js/main.js?v=15"></script>
   </body>
 </html>
