@@ -234,6 +234,7 @@ const favoriteMediaItems = {
     { type: "image", src: "images/potato/potato_1.png" },
     { type: "image", src: "images/potato/potato_2.jpg" },
     { type: "image", src: "images/potato/potato_3.png" },
+    { type: "image", src: "images/potato/potato_4.jpeg" },
   ],
 };
 
