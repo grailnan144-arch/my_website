@@ -3,7 +3,7 @@
 // ==========================================
 // Bump this whenever images are replaced (e.g. re-cropped) so browsers
 // fetch the fresh copy instead of the previous one from cache.
-const ASSET_VERSION = "15";
+const ASSET_VERSION = "16";
 
 function assetUrl(path) {
   if (!path) return path;
@@ -134,6 +134,9 @@ const friesImages = [
   "images/fries/fries_1.png",
   "images/fries/fries_2.jpg",
   "images/fries/fries_3.jpg",
+  "images/fries/fries_4.png",
+  "images/fries/fries_5.png",
+  "images/fries/fries_6.jpg",
 ];
 
 let friesIndex = 0;
@@ -223,18 +226,30 @@ const favoriteMediaItems = {
     { type: "image", src: "images/spider/spider_1.webp" },
     { type: "image", src: "images/spider/spider_2.jpg" },
     { type: "image", src: "images/spider/spider_3.jpg" },
+    { type: "image", src: "images/spider/spider_4.jpg" },
+    { type: "image", src: "images/spider/spider_5.jpg" },
+    { type: "image", src: "images/spider/spider_6.jpg" },
+    { type: "image", src: "images/spider/spider_7.jpg" },
+    { type: "image", src: "images/spider/spider_8.jpg" },
+    { type: "image", src: "images/spider/spider_9.jpg" },
+    { type: "image", src: "images/spider/spider_10.jpg" },
   ],
   bbq: [
     { type: "video", src: "videos/bbq_vid/bbq_1.mp4" },
     { type: "image", src: "images/bbq/bbq_1.jpg" },
     { type: "image", src: "images/bbq/bbq_2.jpg" },
     { type: "image", src: "images/bbq/bbq_3.jpg" },
+    { type: "image", src: "images/bbq/bbq_4.png" },
+    { type: "image", src: "images/bbq/bbq_5.png" },
+    { type: "image", src: "images/bbq/bbq_6.png" },
   ],
   chips: [
     { type: "image", src: "images/potato/potato_1.png" },
     { type: "image", src: "images/potato/potato_2.jpg" },
     { type: "image", src: "images/potato/potato_3.png" },
     { type: "image", src: "images/potato/potato_4.jpeg" },
+    { type: "image", src: "images/potato/potato_5.jpg" },
+    { type: "image", src: "images/potato/potato_6.jpg" },
   ],
 };
 
@@ -611,6 +626,19 @@ const musicItems = [
   { type: "image", src: "images/music/music_4.jpg" },
   { type: "image", src: "images/music/music_5.jpg" },
   { type: "image", src: "images/music/music_6.jpg" },
+  { type: "image", src: "images/music/music_7.jpg" },
+  { type: "image", src: "images/music/music_8.jpg" },
+  { type: "image", src: "images/music/music_9.jpg" },
+  { type: "image", src: "images/music/music_10.jpg" },
+  { type: "image", src: "images/music/music_11.jpg" },
+  { type: "image", src: "images/music/music_12.jpg" },
+  { type: "image", src: "images/music/music_13.jpg" },
+  { type: "image", src: "images/music/music_14.jpg" },
+  { type: "image", src: "images/music/music_15.jpg" },
+  { type: "image", src: "images/music/music_16.jpg" },
+  { type: "image", src: "images/music/music_17.jpg" },
+  { type: "image", src: "images/music/music_18.jpg" },
+  { type: "image", src: "images/music/music_19.jpg" },
 ];
 let musicIndex = 0;
 
@@ -731,7 +759,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Never start the background music while a video popup is open
     var mm = document.getElementById("musicModal");
     var fav = document.getElementById("favoritesModal");
-    var favMedia = fav && fav.classList.contains("active") && fav.classList.contains("show-media");
+    var favMedia =
+      fav &&
+      fav.classList.contains("active") &&
+      fav.classList.contains("show-media");
     if ((mm && mm.classList.contains("active")) || favMedia) return;
 
     bgMusic.muted = false;
@@ -761,8 +792,13 @@ document.addEventListener("DOMContentLoaded", function () {
       var mm = document.getElementById("musicModal");
       var fav = document.getElementById("favoritesModal");
       var videoPopupOpen = mm && mm.classList.contains("active");
-      var favMediaOpen = fav && fav.classList.contains("active") && fav.classList.contains("show-media");
-      if (!videoPopupOpen && !favMediaOpen) {
+      var favMediaOpen =
+        fav &&
+        fav.classList.contains("active") &&
+        fav.classList.contains("show-media");
+      var aboutVideo = document.querySelector(".about-video");
+      var aboutVideoPlaying = aboutVideo && !aboutVideo.paused;
+      if (!videoPopupOpen && !favMediaOpen && !aboutVideoPlaying) {
         bgMusic.play().catch(function () {});
       }
     }
@@ -774,4 +810,39 @@ document.addEventListener("DOMContentLoaded", function () {
       bgMusic.currentTime = 0;
     } catch (e) {}
   });
+});
+
+// ==========================================
+// ABOUT ME VIDEO <-> BACKGROUND MUSIC
+// ==========================================
+document.addEventListener("DOMContentLoaded", function () {
+  var aboutVideo = document.querySelector(".about-video");
+  var bgMusic = document.getElementById("bgMusic");
+  if (!aboutVideo || !bgMusic) return;
+
+  function isOtherMediaOpen() {
+    var mm = document.getElementById("musicModal");
+    if (mm && mm.classList.contains("active")) return true;
+    var fav = document.getElementById("favoritesModal");
+    return !!(
+      fav &&
+      fav.classList.contains("active") &&
+      fav.classList.contains("show-media")
+    );
+  }
+
+  // While the About Me video is playing, keep the bg music paused
+  aboutVideo.addEventListener("play", function () {
+    bgMusic.pause();
+  });
+
+  // When the About Me video is paused or finished, bring the bg music back
+  function resumeBgMusic() {
+    if (isOtherMediaOpen()) return;
+    if (!aboutVideo.paused) return;
+    var p = bgMusic.play();
+    if (p !== undefined) p.catch(function () {});
+  }
+  aboutVideo.addEventListener("pause", resumeBgMusic);
+  aboutVideo.addEventListener("ended", resumeBgMusic);
 });

@@ -22,7 +22,7 @@
     />
 
     <!-- ?v= cache-busting: forces the browser to fetch the latest file even if an older copy is cached -->
-    <link rel="stylesheet" href="css/style.css?v=15" />
+    <link rel="stylesheet" href="css/style.css?v=16" />
 
     <!-- Critical inline styles: keeps the Aviation & Music Beats text design intact in any cache state -->
     <style>
@@ -69,16 +69,19 @@
         </h2>
 
         <div class="about-layout">
-          <!-- Left Column: Profile Picture -->
-          <div class="about-photo-column">
-            <img
-              class="about-photo"
-              src="images/profile/aboutme_profile.jpg?v=15"
-              alt="Jarred Reinel C. Vivar"
-            />
+          <!-- Left Column: Profile Video -->
+          <div class="about-media-column">
+            <video
+              class="about-video"
+              src="videos/profile_vid/profile_video.mp4?v=16"
+              controls
+              playsinline
+              preload="metadata"
+              aria-label="Jarred Reinel C. Vivar profile video"
+            ></video>
           </div>
 
-          <!-- Right Column: About Me Paragraphs -->
+          <!-- Middle Column: About Me Paragraphs -->
           <div class="about-text">
             <p style="font-size: 1.1rem; color: #f1f5f9">
               Hello and welcome to my site! My name is
@@ -94,6 +97,15 @@
               into action with Spider-Man games, listening to high-energy music,
               and enjoying delicious smoked barbecue and crispy fries.
             </p>
+          </div>
+
+          <!-- Right Column: Profile Picture -->
+          <div class="about-media-column">
+            <img
+              class="about-photo"
+              src="images/profile/aboutme_profile.jpg?v=16"
+              alt="Jarred Reinel C. Vivar"
+            />
           </div>
         </div>
       </section>
@@ -371,6 +383,123 @@
                                         from { opacity: 0; transform: scale(0.92) translateY(10px); }
                                         to { opacity: 1; transform: scale(1) translateY(0); }
                                     }
+                                    /* ---- Uneven photo collage (all 3 slides) ---- */
+                                    .slide.cover {
+                                        position: relative;
+                                        align-self: stretch;
+                                        width: 100%;
+                                        max-width: 100%;
+                                        padding: 0;
+                                        overflow: hidden;
+                                        background: #070510;
+                                    }
+                                    .collage {
+                                        position: absolute;
+                                        inset: 0;
+                                        display: grid;
+                                        gap: 7px;
+                                        padding: 7px;
+                                        background: radial-gradient(circle at 50% 45%, #15122e 0%, #070510 100%);
+                                    }
+                                    .collage img {
+                                        width: 100%;
+                                        height: 100%;
+                                        min-width: 0;
+                                        min-height: 0;
+                                        object-fit: cover;
+                                        object-position: center;
+                                        display: block;
+                                        border-radius: 9px;
+                                        border: 1px solid rgba(255, 255, 255, 0.08);
+                                        background: linear-gradient(135deg, #191335 0%, #0c0a1c 100%);
+                                        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+                                    }
+                                    .collage img.hero {
+                                        object-fit: cover;
+                                        object-position: center;
+                                        border: 2px solid rgba(56, 189, 248, 0.75);
+                                        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.8), 0 0 34px rgba(56, 189, 248, 0.45);
+                                    }
+                                    /* Slide 1 - hero (person) in the CENTER */
+                                    #slide1 .collage {
+                                        grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.15fr) minmax(0,1fr);
+                                        grid-template-rows: minmax(0,0.9fr) minmax(0,1.35fr) minmax(0,1.35fr) minmax(0,0.9fr);
+                                        grid-template-areas:
+                                            'a b b c d'
+                                            'e F F f g'
+                                            'h F F i j'
+                                            'k k l l m';
+                                    }
+                                    /* Slide 2 - hero (person) on the LEFT */
+                                    #slide2 .collage {
+                                        grid-template-columns: minmax(0,1.15fr) minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+                                        grid-template-rows: minmax(0,0.9fr) minmax(0,1.35fr) minmax(0,1.35fr) minmax(0,0.9fr);
+                                        grid-template-areas:
+                                            'a a b b c'
+                                            'F F d e f'
+                                            'F F g h i'
+                                            'j j j k k';
+                                    }
+                                    /* Slide 3 - hero (person) on the RIGHT */
+                                    #slide3 .collage {
+                                        grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.15fr);
+                                        grid-template-rows: minmax(0,0.9fr) minmax(0,1.35fr) minmax(0,1.35fr) minmax(0,0.9fr);
+                                        grid-template-areas:
+                                            'a b c c d'
+                                            'e f g F F'
+                                            'h i j F F'
+                                            'k k l l l';
+                                    }
+                                    .collage-shade {
+                                        position: absolute;
+                                        inset: 0;
+                                        z-index: 2;
+                                        pointer-events: none;
+                                        background: radial-gradient(circle at 50% 50%, rgba(7,5,16,0.32) 0%, rgba(7,5,16,0.12) 60%, rgba(7,5,16,0.45) 100%);
+                                    }
+                                    .collage-text {
+                                        position: absolute;
+                                        inset: 0;
+                                        z-index: 3;
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        justify-content: center;
+                                        text-align: center;
+                                        padding: 18px;
+                                        color: #ffffff;
+                                        opacity: 0.5;
+                                        pointer-events: none;
+                                    }
+                                    .collage-text .slide-badge {
+                                        background: rgba(255, 255, 255, 0.18);
+                                        color: #ffffff;
+                                        border: 1px solid rgba(255, 255, 255, 0.35);
+                                        letter-spacing: 0.12em;
+                                    }
+                                    .collage-text h2 {
+                                        color: #ffffff;
+                                        background: none;
+                                        -webkit-text-fill-color: #ffffff;
+                                        font-size: clamp(1.25rem, 3.2vw, 1.95rem);
+                                        letter-spacing: 0.08em;
+                                        text-transform: uppercase;
+                                        text-shadow: 0 2px 26px rgba(0, 0, 0, 0.95);
+                                    }
+                                    .collage-text p {
+                                        color: #ffffff;
+                                        font-size: 0.88rem;
+                                        text-shadow: 0 1px 14px rgba(0, 0, 0, 0.95);
+                                    }
+                                    .collage-text p i { font-size: 0.85em; }
+                                    .collage-sub { margin-top: 6px; letter-spacing: 0.03em; }
+                                    .collage-accent {
+                                        width: 90px;
+                                        height: 3px;
+                                        border-radius: 3px;
+                                        margin-top: 14px;
+                                        background: linear-gradient(90deg, transparent, #38bdf8, #ff007f, transparent);
+                                    }
                                     .slide-badge {
                                         display: inline-block;
                                         padding: 4px 12px;
@@ -418,28 +547,85 @@
                             </head>
                             <body>
                                 <div class='slide-deck'>
-                                    <!-- Slide 1 -->
-                                    <div class='slide active' id='slide1'>
-                                        <span class='slide-badge'>Slide 1 of 3</span>
-                                        <h2>Aviation, Beats & Web-Slinging</h2>
-                                        <p>Created by <strong>Jarred Reinel C. Vivar</strong></p>
-                                        <p style='margin-top: 8px; font-size: 0.95rem; color: #38bdf8;'>Personal Passion & Web Development Showcase</p>
+                                    <!-- Slide 1 : hero (person) CENTER -->
+                                    <div class='slide active cover' id='slide1'>
+                                        <div class='collage'>
+                                            <img class='hero' style='grid-area: F' src='images/presentation_slide_1/s_7.jpg?v=16' alt='Featured photo (center)' />
+                                            <img style='grid-area: a' src='images/presentation_slide_1/s_1.jpg?v=16' alt='Slide 1 photo 1' />
+                                            <img style='grid-area: b' src='images/presentation_slide_1/s_2.jpg?v=16' alt='Slide 1 photo 2' />
+                                            <img style='grid-area: c' src='images/presentation_slide_1/s_3.jpg?v=16' alt='Slide 1 photo 3' />
+                                            <img style='grid-area: d' src='images/presentation_slide_1/s_4.jpg?v=16' alt='Slide 1 photo 4' />
+                                            <img style='grid-area: e' src='images/presentation_slide_1/s_5.jpg?v=16' alt='Slide 1 photo 5' />
+                                            <img style='grid-area: g' src='images/presentation_slide_1/s_6.jpg?v=16' alt='Slide 1 photo 6' />
+                                            <img style='grid-area: h' src='images/presentation_slide_1/s_8.jpg?v=16' alt='Slide 1 photo 8' />
+                                            <img style='grid-area: i' src='images/presentation_slide_1/s_9.jpg?v=16' alt='Slide 1 photo 9' />
+                                            <img style='grid-area: j' src='images/presentation_slide_1/s_10.jpg?v=16' alt='Slide 1 photo 10' />
+                                            <img style='grid-area: k' src='images/presentation_slide_1/s_11.png?v=16' alt='Slide 1 photo 11' />
+                                            <img style='grid-area: l' src='images/presentation_slide_1/s_12.png?v=16' alt='Slide 1 photo 12' />
+                                            <img style='grid-area: m' src='images/presentation_slide_1/s_13.png?v=16' alt='Slide 1 photo 13' />
+                                            <img style='grid-area: f' src='images/presentation_slide_1/s_14.png?v=16' alt='Slide 1 photo 14' />
+                                        </div>
+                                        <div class='collage-shade'></div>
+                                        <div class='collage-text'>
+                                            <span class='slide-badge'>Slide 1 of 3</span>
+                                            <h2>Aviation, Beats &amp; Web-Slinging</h2>
+                                            <p>Created by <strong>Jarred Reinel C. Vivar</strong></p>
+                                            <p class='collage-sub'>Personal Passion &amp; Web Development Showcase</p>
+                                            <span class='collage-accent'></span>
+                                        </div>
                                     </div>
 
-                                    <!-- Slide 2 -->
-                                    <div class='slide' id='slide2'>
-                                        <span class='slide-badge' style='background:rgba(255,0,127,0.2); color:#ff007f;'>Slide 2 of 3</span>
-                                        <h2>Sky High & Superheroes</h2>
-                                        <p><i class='fa-solid fa-plane' style='color:#38bdf8;'></i> <strong>Aviation:</strong> Fascinated by aircraft engineering & flight.</p>
-                                        <p style='margin-top:8px;'><i class='fa-solid fa-mask' style='color:#ff3355;'></i> <strong>Spider-Man & Music:</strong> High-flying action & energetic music tracks!</p>
+                                    <!-- Slide 2 : hero (person) LEFT -->
+                                    <div class='slide cover' id='slide2'>
+                                        <div class='collage'>
+                                            <img class='hero' style='grid-area: F' src='images/presentation_slide_2/s2_1.jpeg?v=16' alt='Featured photo (left)' />
+                                            <img style='grid-area: a' src='images/presentation_slide_2/s2_2.jpg?v=16' alt='Slide 2 photo 2' />
+                                            <img style='grid-area: b' src='images/presentation_slide_2/s2_3.jpg?v=16' alt='Slide 2 photo 3' />
+                                            <img style='grid-area: c' src='images/presentation_slide_2/s2_4.jpg?v=16' alt='Slide 2 photo 4' />
+                                            <img style='grid-area: e' src='images/presentation_slide_2/s2_5.jpg?v=16' alt='Slide 2 photo 5' />
+                                            <img style='grid-area: f' src='images/presentation_slide_2/s2_6.jpg?v=16' alt='Slide 2 photo 6' />
+                                            <img style='grid-area: g' src='images/presentation_slide_2/s2_7.jpg?v=16' alt='Slide 2 photo 7' />
+                                            <img style='grid-area: h' src='images/presentation_slide_2/s2_8.jpg?v=16' alt='Slide 2 photo 8' />
+                                            <img style='grid-area: i' src='images/presentation_slide_2/s2_9.jpg?v=16' alt='Slide 2 photo 9' />
+                                            <img style='grid-area: j' src='images/presentation_slide_2/s2_10.jpg?v=16' alt='Slide 2 photo 10' />
+                                            <img style='grid-area: k' src='images/presentation_slide_2/s2_11.png?v=16' alt='Slide 2 photo 11' />
+                                            <img style='grid-area: d' src='images/presentation_slide_2/s2_12.jpg?v=16' alt='Slide 2 photo 12' />
+                                        </div>
+                                        <div class='collage-shade'></div>
+                                        <div class='collage-text'>
+                                            <span class='slide-badge' style='background:rgba(255,0,127,0.2); color:#ff007f;'>Slide 2 of 3</span>
+                                            <h2>Sky High &amp; Superheroes</h2>
+                                            <p><i class='fa-solid fa-plane' style='color:#38bdf8;'></i> <strong>Aviation:</strong> Fascinated by aircraft engineering &amp; flight.</p>
+                                            <p><i class='fa-solid fa-mask' style='color:#ff3355;'></i> <strong>Spider-Man &amp; Music:</strong> High-flying action &amp; energetic music tracks!</p>
+                                            <span class='collage-accent'></span>
+                                        </div>
                                     </div>
 
-                                    <!-- Slide 3 -->
-                                    <div class='slide' id='slide3'>
-                                        <span class='slide-badge' style='background:rgba(255,183,0,0.2); color:#ffb700;'>Slide 3 of 3</span>
-                                        <h2>The Ultimate Fuel</h2>
-                                        <p><i class='fa-solid fa-utensils' style='color:#ffb700;'></i> <strong>Favorites:</strong> Smoked BBQ, Crispy Potato Chips & Golden French Fries.</p>
-                                        <p style='margin-top:10px; color:#10b981;'><strong>Thank you for viewing my presentation!</strong></p>
+                                    <!-- Slide 3 : hero (person) RIGHT -->
+                                    <div class='slide cover' id='slide3'>
+                                        <div class='collage'>
+                                            <img class='hero' style='grid-area: F' src='images/presentation_slide_3/s3_1.png?v=16' alt='Featured photo (right)' />
+                                            <img style='grid-area: a' src='images/presentation_slide_3/s3_2.jpg?v=16' alt='Slide 3 photo 2' />
+                                            <img style='grid-area: b' src='images/presentation_slide_3/s3_3.jpg?v=16' alt='Slide 3 photo 3' />
+                                            <img style='grid-area: c' src='images/presentation_slide_3/s3_4.jpg?v=16' alt='Slide 3 photo 4' />
+                                            <img style='grid-area: d' src='images/presentation_slide_3/s3_5.jpg?v=16' alt='Slide 3 photo 5' />
+                                            <img style='grid-area: e' src='images/presentation_slide_3/s3_6.jpg?v=16' alt='Slide 3 photo 6' />
+                                            <img style='grid-area: f' src='images/presentation_slide_3/s3_7.jpg?v=16' alt='Slide 3 photo 7' />
+                                            <img style='grid-area: g' src='images/presentation_slide_3/s3_8.jpg?v=16' alt='Slide 3 photo 8' />
+                                            <img style='grid-area: h' src='images/presentation_slide_3/s3_9.jpg?v=16' alt='Slide 3 photo 9' />
+                                            <img style='grid-area: i' src='images/presentation_slide_3/s3_10.jpg?v=16' alt='Slide 3 photo 10' />
+                                            <img style='grid-area: j' src='images/presentation_slide_3/s3_11.jpg?v=16' alt='Slide 3 photo 11' />
+                                            <img style='grid-area: k' src='images/presentation_slide_3/s3_12.jpg?v=16' alt='Slide 3 photo 12' />
+                                            <img style='grid-area: l' src='images/presentation_slide_3/s3_13.webp?v=16' alt='Slide 3 photo 13' />
+                                        </div>
+                                        <div class='collage-shade'></div>
+                                        <div class='collage-text'>
+                                            <span class='slide-badge' style='background:rgba(255,183,0,0.2); color:#ffb700;'>Slide 3 of 3</span>
+                                            <h2>The Ultimate Fuel</h2>
+                                            <p><i class='fa-solid fa-utensils' style='color:#ffb700;'></i> <strong>Favorites:</strong> Smoked BBQ, Crispy Potato Chips &amp; Golden French Fries.</p>
+                                            <p><strong>Thank you for viewing my presentation!</strong></p>
+                                            <span class='collage-accent'></span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -720,12 +906,7 @@
             playsinline
             preload="metadata"
           ></video>
-          <img
-            id="favImage"
-            class="fav-image"
-            src=""
-            alt="Favorite media"
-          />
+          <img id="favImage" class="fav-image" src="" alt="Favorite media" />
           <div class="fav-placeholder">
             <span class="fav-placeholder-icon" id="favPlaceholderIcon"></span>
             <p id="favPlaceholderText">Content coming soon!</p>
@@ -772,6 +953,6 @@
       </div>
     </div>
 
-    <script src="js/main.js?v=15"></script>
+    <script src="js/main.js?v=16"></script>
   </body>
 </html>
